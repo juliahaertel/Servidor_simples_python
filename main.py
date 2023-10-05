@@ -1,6 +1,8 @@
 import socket
 import os
 import time
+import random
+
 
 # Opção 1: Servidor Web Simples
 def run_web_server():
@@ -25,9 +27,28 @@ def run_web_server():
     connection.close()
 
 # Oppção 2: Cliente Ping UDP
+
+def run_udp_ping_server():
+    server_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    server_socket.bind(('localhost', 12000))
+
+    while True:
+        message, client_address = server_socket.recvfrom(1024)
+        message = message.decode()
+        print(f'Server Ping UDP: Received "{message}" from {client_address}')
+
+        # Simulate packet loss by randomly dropping some packets
+        if random.randint(0, 9) < 3:
+            print('Server Ping UDP: Packet dropped')
+            continue
+
+        response = f'Pong {message}'.encode()
+        server_socket.sendto(response, client_address)
+
 def run_udp_ping_client():
     server_address = ('localhost', 12000)
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    client_socket.settimeout(1)  # Set a 1-second timeout for the socket
 
     for i in range(1, 11):
         message = f'Ping {i}'.encode()
@@ -35,7 +56,6 @@ def run_udp_ping_client():
         client_socket.sendto(message, server_address)
 
         try:
-            client_socket.settimeout(1)
             response, server = client_socket.recvfrom(1024)
             end_time = time.time()
             rtt = end_time - start_time
@@ -52,6 +72,7 @@ if __name__ == '__main__':
     if task == '1':
         run_web_server()
     elif task == '2':
+        run_udp_ping_server()
         run_udp_ping_client()
     else:
         print("Escolha inválida. Digite '1' ou '2'.")
