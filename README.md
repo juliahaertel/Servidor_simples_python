@@ -21,7 +21,7 @@ Este é um servidor web simples que pode responder a solicitações HTTP básica
 Para executar o servidor web, siga estas etapas:
 1. Execute o script.
 2. Digite '1' quando solicitado.
-3. Abra um navegador e acesse `http://localhost` para testar o servidor.
+3. Abra um navegador e acesse `http://localhost/index.html` para testar o servidor.
 
 ## Opção 2: Cliente Ping UDP
 
